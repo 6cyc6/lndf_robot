@@ -188,6 +188,70 @@ class OccNetOptimizer:
 
         # print('target_act_hat: ', self.target_act_hat)
 
+    def compute_target_act(self, obj_pts, query_pts):
+        obj_pts = torch.from_numpy(obj_pts).float().to(self.dev)
+        query_pts = torch.from_numpy(query_pts).float().to(self.dev)
+
+        obj_pts_mean = obj_pts.mean(0)
+        obj_pts = obj_pts - obj_pts_mean
+        query_pts = query_pts - obj_pts_mean
+
+        rndperm = torch.randperm(obj_pts.size(0))
+        ref_model_input = {
+            'point_cloud': obj_pts[None, rndperm[:self.n_obj_points], :],
+            'coords': query_pts[None, :self.n_query_points, :]
+        }
+        demo_latent = self.model.extract_latent(ref_model_input).detach()
+        demo_act_hat = self.model.forward_latent(demo_latent,
+                                                 ref_model_input['coords']).detach()
+        self.target_act_hat = demo_act_hat
+
+    def shape_completion(self, obj_pts, thresh=0.3):
+        # filter out outliers of the point cloud
+        pcd_mean = np.mean(obj_pts, axis=0)
+        inliers = np.where(np.linalg.norm(obj_pts - pcd_mean, 2, 1) < 0.18)[0]
+        obj_pts = obj_pts[inliers]
+
+        # center the filtered object point cloud
+        obj_pts_mean = obj_pts.mean(0)
+        obj_pts = obj_pts - obj_pts_mean
+
+        # sample query points within the bounding box of the filtered point cloud
+        shape_pcd = trimesh.PointCloud(obj_pts)
+        bb = shape_pcd.bounding_box
+        bb_scene = trimesh.Scene();
+        bb_scene.add_geometry([shape_pcd, bb])
+        # bb_scene.show()
+        query_pts = bb.sample_volume(10000)
+
+        # to device
+        eval_obj_pts = torch.from_numpy(obj_pts).float().to(self.dev)
+        eval_pts = torch.from_numpy(query_pts).float().to(self.dev)
+
+        # calculate the occupancy
+        shape = {}
+        rndperm = torch.randperm(eval_obj_pts.size(0))
+        rndperm_np = rndperm.cpu().numpy()
+        shape = {
+            'point_cloud': eval_obj_pts[None, rndperm[:1000], :],
+            'coords': eval_pts[None, :, :]
+        }
+        out = self.model(shape)
+
+        in_inds = torch.where(out['occ'].squeeze() > thresh)[0].cpu().numpy()
+        in_pts = query_pts[in_inds]
+        np.random.shuffle(in_pts)
+
+        pcd = np.vstack([obj_pts[rndperm_np[:1500]], in_pts[:1000]])
+
+        # filter again
+        pcd_mean = np.mean(pcd, axis=0)
+        inliers = np.where(np.linalg.norm(pcd - pcd_mean, 2, 1) < 0.18)[0]
+        pcd = pcd[inliers]
+        np.random.shuffle(pcd)
+
+        return pcd + obj_pts_mean
+
     def optimize_transform_implicit(self, shape_pts_world_np, viz_path='visualize',
         ee=True, return_intermediates=False, *args, **kwargs):
         """
@@ -204,8 +268,8 @@ class OccNetOptimizer:
         dev = self.dev
         n_pts = 1500
         # opt_pts = 500
-        # opt_pts = 1000 # Seems to work well
-        opt_pts = 2000
+        opt_pts = 1000  # Seems to work well
+        # opt_pts = 2000
         perturb_scale = self.noise_scale
         perturb_decay = self.noise_decay
 

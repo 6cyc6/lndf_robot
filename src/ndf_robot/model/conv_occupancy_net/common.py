@@ -1,7 +1,8 @@
 # import multiprocessing
 import torch
 # from ndf_robot.model.conv_occupancy_net.utils.libkdtree import KDTree
-from ndf_robot.utils.libkdtree import KDTree
+# from ndf_robot.utils.libkdtree import KDTree
+from pykdtree.kdtree import KDTree
 # from src.utils.libkdtree import KDTree
 import numpy as np
 import math

@@ -160,7 +160,7 @@ def C3(theta):
 
 
 def unwrap(angles, min_val=-np.pi, max_val=np.pi):
-    if type(angles) is not 'ndarray':
+    if type(angles) != 'ndarray':
         angles = np.array(angles)
     angles_unwrapped = []
     for counter in range(angles.shape[0]):
