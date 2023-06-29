@@ -1,11 +1,11 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from lndf_robot.src.ndf_robot.model.conv_occupancy_net.layers import ResnetBlockFC
+from ndf_robot.model.conv_occupancy_net.layers import ResnetBlockFC
 from torch_scatter import scatter_mean, scatter_max
-from lndf_robot.src.ndf_robot.model.conv_occupancy_net.common import coordinate2index, normalize_coordinate, normalize_3d_coordinate, map2local
-from lndf_robot.src.ndf_robot.model.conv_occupancy_net.encoder.unet import UNet
-from lndf_robot.src.ndf_robot.model.conv_occupancy_net.encoder.unet3d import UNet3D
+from ndf_robot.model.conv_occupancy_net.common import coordinate2index, normalize_coordinate, normalize_3d_coordinate, map2local
+from ndf_robot.model.conv_occupancy_net.encoder.unet import UNet
+from ndf_robot.model.conv_occupancy_net.encoder.unet3d import UNet3D
 
 
 class LocalPoolPointnet(nn.Module):

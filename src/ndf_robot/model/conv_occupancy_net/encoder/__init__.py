@@ -1,4 +1,4 @@
-from lndf_robot.src.ndf_robot.model.conv_occupancy_net.encoder import (
+from ndf_robot.model.conv_occupancy_net.encoder import (
     pointnet, voxels, pointnetpp
 )
 

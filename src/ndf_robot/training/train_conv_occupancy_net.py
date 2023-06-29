@@ -21,7 +21,7 @@ from ndf_robot.training.util import make_unique_path_to_dir
 
 if __name__ == '__main__':
     p = configargparse.ArgumentParser()
-    p.add('-c', '--config_filepath', required=False, is_config_file=True, help='Path to config file.')
+    p.add_argument('-c', '--config_filepath', required=False, is_config_file=True, help='Path to config file.')
 
     p.add_argument('--logging_root', type=str, default=osp.join(path_util.get_ndf_model_weights(), 'lndf'), help='root for logging')
     # p.add_argument('--logging_root', type=str, default=osp.join(path_util.get_ndf_model_weights(), 'lndf_refined'), help='root for logging')
@@ -114,7 +114,7 @@ if __name__ == '__main__':
         'neg_any_se3': True,
         # Ratio (between 0 and 1) of how much to translate object by.  This can
         # help with over-fitting.
-        'trans_ratio': 0.2,
+        'trans_ratio': 0.5,
     }
 
     val_dataloader_args = {
@@ -125,7 +125,7 @@ if __name__ == '__main__':
         'obj_class': opt.obj_class,
         'any_rot': True,
         'neg_any_se3': True,
-        'trans_ratio': 0.2
+        'trans_ratio': 0.5
     }
 
     # -- CREATE DATALOADERS -- #
