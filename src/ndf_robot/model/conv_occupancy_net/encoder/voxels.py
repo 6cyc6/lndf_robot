@@ -2,9 +2,9 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torch_scatter import scatter_mean
-from ndf_robot.model.conv_occupancy_net.encoder.unet import UNet
-from ndf_robot.model.conv_occupancy_net.encoder.unet3d import UNet3D
-from ndf_robot.model.conv_occupancy_net.common import coordinate2index, normalize_coordinate, normalize_3d_coordinate
+from lndf_robot.src.ndf_robot.model.conv_occupancy_net.encoder.unet import UNet
+from lndf_robot.src.ndf_robot.model.conv_occupancy_net.encoder.unet3d import UNet3D
+from lndf_robot.src.ndf_robot.model.conv_occupancy_net.common import coordinate2index, normalize_coordinate, normalize_3d_coordinate
 
 
 class LocalVoxelEncoder(nn.Module):
