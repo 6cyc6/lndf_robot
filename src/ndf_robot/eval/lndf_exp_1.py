@@ -220,9 +220,17 @@ if __name__ == '__main__':
         iter_query_pts = util.transform_pcd(query_pts_mean, iter_mats[idx])
         intermediate_query_pts.append(iter_query_pts)
 
+    mean_1 = np.mean(posed_obj_pts)
+    posed_obj_pts = posed_obj_pts - mean_1 - np.array([0.05, 0, 0])
+    posed_query_pts = posed_query_pts - mean_1 - np.array([0.05, 0, 0])
+    mean_2 = np.mean(rotated_obj_pcd)
+    rotated_obj_pcd = rotated_obj_pcd - mean_2
+    final_query_pts = final_query_pts - mean_2
     # Plot
     ps.init()
     ps.set_up_dir("z_up")
-    ps1 = ps.register_point_cloud("pcd_1", rotated_obj_pcd, radius=0.006, enabled=True)
-    ps2 = ps.register_point_cloud("pcd_2", final_query_pts, radius=0.006, enabled=True)
+    ps.register_point_cloud("ref_1", posed_obj_pts, radius=0.003, enabled=True)
+    ps.register_point_cloud("ref_2", posed_query_pts, radius=0.003, enabled=True)
+    ps.register_point_cloud("pcd_1", rotated_obj_pcd, radius=0.003, enabled=True)
+    ps.register_point_cloud("pcd_2", final_query_pts, radius=0.003, enabled=True)
     ps.show()

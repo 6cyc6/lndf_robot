@@ -114,7 +114,7 @@ if __name__ == '__main__':
         'neg_any_se3': True,
         # Ratio (between 0 and 1) of how much to translate object by.  This can
         # help with over-fitting.
-        'trans_ratio': 0,
+        'trans_ratio': 0.2,
     }
 
     val_dataloader_args = {
@@ -125,7 +125,7 @@ if __name__ == '__main__':
         'obj_class': opt.obj_class,
         'any_rot': True,
         'neg_any_se3': True,
-        'trans_ratio': 0
+        'trans_ratio': 0.2
     }
 
     # -- CREATE DATALOADERS -- #
@@ -133,9 +133,9 @@ if __name__ == '__main__':
     val_dataset = dataio.JointOccTrainDataset(**val_dataloader_args)
 
     train_dataloader = DataLoader(train_dataset, batch_size=opt.batch_size, shuffle=True,
-                                drop_last=True, num_workers=6)
+                                drop_last=True, num_workers=6, pin_memory=True)
     val_dataloader = DataLoader(val_dataset, batch_size=opt.batch_size, shuffle=True,
-                                drop_last=True, num_workers=4)
+                                drop_last=True, num_workers=4, pin_memory=True)
 
     # -- CREATE MODEL -- #
     model = conv_occupancy_network.ConvolutionalOccupancyNetwork(

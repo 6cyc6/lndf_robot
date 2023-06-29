@@ -104,8 +104,8 @@ class QueryPoints():
         U_TH = np.random.rand(n_pts, 1)
         U_R = np.random.rand(n_pts, 1)
         U_Z = np.random.rand(n_pts, 1)
-        X = radius * np.sqrt(U_R) * np.cos(2 * np.pi * U_TH)
-        Y = radius * np.sqrt(U_R) * np.sin(2 * np.pi * U_TH)
+        X = radius * np.sqrt(U_R) * np.cos(1 * np.pi * U_TH)
+        Y = radius * np.sqrt(U_R) * np.sin(1 * np.pi * U_TH)
         Z = height * U_Z
         # Z = np.zeros((n_pts, 1))
 

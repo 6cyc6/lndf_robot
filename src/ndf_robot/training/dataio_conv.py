@@ -172,8 +172,8 @@ class JointOccTrainDataset(Dataset):
                 cam_poses.append(data['cam_pose_world'][i])
 
             # change these values depending on the intrinsic parameters of camera used to collect the data. These are what we used in pybullet
-            y, x = torch.meshgrid(torch.arange(480), torch.arange(640))
-
+            # y, x = torch.meshgrid(torch.arange(480), torch.arange(640))
+            x, y = torch.meshgrid(torch.arange(640), torch.arange(480), indexing='xy')
             # Compute native intrinsic matrix
             sensor_half_width = 320
             sensor_half_height = 240

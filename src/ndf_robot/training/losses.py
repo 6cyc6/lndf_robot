@@ -102,7 +102,8 @@ def contrastive_cross_entropy(latent_loss_scale: int = 1, dis_offset: float = 0.
 
         if similar_occ_only:
             # Create bool tensor to mask unoccupied stuff
-            non_zero_label = torch.tensor(label.unsqueeze(-1)).bool()
+            # non_zero_label = torch.tensor(label.unsqueeze(-1)).bool()
+            non_zero_label = (label.unsqueeze(-1)).clone().detach().bool()
 
             standard_act_hat *= non_zero_label
             rot_act_hat *= non_zero_label
@@ -116,11 +117,12 @@ def contrastive_cross_entropy(latent_loss_scale: int = 1, dis_offset: float = 0.
         occ_loss = (standard_loss_occ + rot_loss_occ) / 2
 
         # -- Get all points with non-zero ground truth occupancy -- #
-        non_zero_label = torch.tensor(label).int()
+        # non_zero_label = torch.tensor(label).int()
+        non_zero_label = label.clone().detach().int()
 
         dev = non_zero_label.device
 
-        non_zero_idx = torch.arange(0, label.shape[1])[None, :].repeat(6, 1).to(dev)
+        non_zero_idx = torch.arange(0, label.shape[1])[None, :].repeat(8, 1).to(dev)
         non_zero_idx = non_zero_label * non_zero_idx
         non_zero_idx = non_zero_idx.sort(dim=1, descending=True)[0]
 
@@ -178,8 +180,8 @@ def contrastive_cross_entropy(latent_loss_scale: int = 1, dis_offset: float = 0.
         target = target / target.sum(dim=-1, keepdim=True)
 
         # print(weight)
-        print(target.min())
-        print(target.sort(descending=True)[0][:, :10])
+        # print(target.min())
+        # print(target.sort(descending=True)[0][:, :10])
 
         # print(weight.sum())
         # print(relative_sim)
@@ -191,9 +193,9 @@ def contrastive_cross_entropy(latent_loss_scale: int = 1, dis_offset: float = 0.
 
         loss_dict['occ'] = overall_loss
 
-        print('occ loss: ', occ_loss)
-        print('latent pos loss: ', latent_loss)
-        print('overall loss: ', overall_loss)
+        # print('occ loss: ', occ_loss)
+        # print('latent pos loss: ', latent_loss)
+        # print('overall loss: ', overall_loss)
 
         return loss_dict
 

@@ -113,7 +113,8 @@ class LocalDecoder(nn.Module):
         out = out.squeeze(-1)
 
         if self.sigmoid:
-            out = F.sigmoid(out)
+            # out = F.sigmoid(out)
+            out = torch.sigmoid(out)
 
         if self.return_features:
             if self.acts == 'all':
