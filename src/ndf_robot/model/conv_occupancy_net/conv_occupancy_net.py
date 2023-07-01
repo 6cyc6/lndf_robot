@@ -6,7 +6,7 @@ import torch.nn as nn
 from torch import distributions as dist
 
 from ndf_robot.model.conv_occupancy_net.encoder import (pointnet, pointnetpp)
-from src.ndf_robot.model.conv_occupancy_net import decoder
+from ndf_robot.model.conv_occupancy_net import decoder
 
 
 # Encoder dictionary
@@ -98,7 +98,6 @@ class ConvolutionalOccupancyNetwork(nn.Module):
         else: raise ValueError("Invalid Decoder")
 
         if decoder_type in decoder_dict:
-            # TODO: Add arguments to decoder
             # self.decoder = decoder_dict[decoder_type](dim=3, z_dim=latent_dim, c_dim=0)
             self.decoder = decoder.LocalDecoder(dim=3, c_dim=latent_dim, sigmoid=sigmoid,
                 return_features=return_features, acts=acts, **decoder_kwargs)

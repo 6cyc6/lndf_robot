@@ -252,3 +252,15 @@ def point_cloud(writer, iter, name, points_xyz, colors=None):
 
     writer.add_mesh(name, vertices=points_xyz, colors=colors,
                      config_dict={"material": point_size_config}, global_step=iter)
+
+
+def scf_net(model, model_input, ground_truth, model_output, writer, iter, prefix=""):
+    """Writes tensorboard summaries using tensorboardx api.
+
+    :param writer: tensorboardx writer object.
+    :param predictions: Output of forward pass.
+    :param ground_truth: Ground truth.
+    :param iter: Iteration number.
+    :param prefix: Every summary will be prefixed with this string.
+    """
+    pass

@@ -687,7 +687,7 @@ class JointSCFTrainDataset(Dataset):
 
             # Rotate pcd randomly
             if self.any_rot:
-                random_transform = torch.tensor(JointOccTrainDataset.__random_rot_transform())
+                random_transform = torch.tensor(JointSCFTrainDataset.__random_rot_transform())
 
                 point_cloud = torch_util.transform_pcd_torch(point_cloud,
                     random_transform)
@@ -707,9 +707,9 @@ class JointSCFTrainDataset(Dataset):
                 max_range = point_cloud.max(dim=0)[0] - point_cloud.min(dim=0)[0]
                 max_range = max_range.mean().numpy()
                 max_trans = max_range * self.trans_ratio
-                random_transform = torch.tensor(JointOccTrainDataset.__random_se3_transform(max_trans))
+                random_transform = torch.tensor(JointSCFTrainDataset.__random_se3_transform(max_trans))
             else:
-                random_transform = torch.tensor(JointOccTrainDataset.__random_rot_transform())
+                random_transform = torch.tensor(JointSCFTrainDataset.__random_rot_transform())
 
             point_cloud_transformed = torch_util.transform_pcd_torch(point_cloud,
                 random_transform)
@@ -799,7 +799,7 @@ class JointSCFTrainDataset(Dataset):
         Returns:
             Transform with random rotation
         """
-        rand_quat = JointOccTrainDataset.__random_quaternions(1)
+        rand_quat = JointSCFTrainDataset.__random_quaternions(1)
 
         rand_rot = Rotation.from_quat(rand_quat)
         rand_rot = rand_rot.as_matrix()
@@ -824,7 +824,7 @@ class JointSCFTrainDataset(Dataset):
         Returns:
             Transform with random rotation
         """
-        rand_quat = JointOccTrainDataset.__random_quaternions(1)
+        rand_quat = JointSCFTrainDataset.__random_quaternions(1)
         rand_trans = np.random.random((3,)) * max_translate
 
         rand_rot = Rotation.from_quat(rand_quat)
