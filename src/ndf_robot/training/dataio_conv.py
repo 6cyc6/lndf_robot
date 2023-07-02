@@ -843,7 +843,17 @@ class JointSCFTrainDataset(Dataset):
 # tar -C $TMPDIR/ -xvzf $(ws_find ikun)/dataset.tgz
 #
 # export PYTHONPATH=$PYTHONPATH:`pwd`
-# export LNDF_SOURCE_DIR=/home/kit/anthropomatik/qy7043/project/ndf_robot/src/ndf_robot/data/training_data
+# export LNDF_SOURCE_DIR=/home/kit/anthropomatik/qy7043/project/ndf_robot/src/ndf_robot/data
 #
 # python train_conv_occupancy_net.py --obj_class mug --experiment_name test_lndf_weights --num_epochs 50 \
+# --iters_til_ckpt 1000 --steps_til_summary 100 --batch_size 8 --triplet_loss --multiview_aug
+
+# source activate lndf
+# cd git_project/lndf_robot/src/ndf_robot/training
+#
+#
+# export PYTHONPATH=$PYTHONPATH:`pwd`
+# export LNDF_SOURCE_DIR=$TMPDIR
+#
+# python train_conv_occupancy_net_nift.py --obj_class mug --experiment_name test_lndf_nift --num_epochs 50 \
 # --iters_til_ckpt 1000 --steps_til_summary 100 --batch_size 8 --triplet_loss --multiview_aug

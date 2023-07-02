@@ -1,6 +1,10 @@
 import os, os.path as osp
 
 
+def get_nift_weight_src():
+    return os.environ['LNDF_WEIGHT']
+
+
 def get_ndf_src():
     return os.environ['LNDF_SOURCE_DIR']
 

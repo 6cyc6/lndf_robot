@@ -11,8 +11,9 @@ import ndf_robot.model.vnn_occupancy_net.vnn_occupancy_net_pointnet_dgcnn as vnn
 import ndf_robot.model.conv_occupancy_net.conv_occupancy_net as conv_occupancy_network
 
 # from ndf_robot.training import summaries, losses, training, dataio, config
-from ndf_robot.training import summaries, losses, training
+from ndf_robot.training import losses, training
 from ndf_robot.training import dataio_conv as dataio
+from ndf_robot.training.summaries import scf_net
 # from ndf_robot.training import dataio as dataio
 
 from ndf_robot.utils import path_util
@@ -23,7 +24,7 @@ if __name__ == '__main__':
     p = configargparse.ArgumentParser()
     p.add_argument('-c', '--config_filepath', required=False, is_config_file=True, help='Path to config file.')
 
-    p.add_argument('--logging_root', type=str, default=osp.join(path_util.get_ndf_model_weights(), 'lndf'), help='root for logging')
+    p.add_argument('--logging_root', type=str, default='./logging', help='root for logging')
     # p.add_argument('--logging_root', type=str, default=osp.join(path_util.get_ndf_model_weights(), 'lndf_refined'), help='root for logging')
     p.add_argument('--obj_class', type=str, required=True,
                 help='bottle, mug, bowl, all')
@@ -53,7 +54,7 @@ if __name__ == '__main__':
     p.add_argument('--depth_aug', action='store_true', help='depth_augmentation')
     p.add_argument('--multiview_aug', action='store_true', help='multiview_augmentation')
 
-    p.add_argument('--checkpoint_path', default=None, help='Checkpoint to trained model.')
+    p.add_argument('--checkpoint_path', type=str, default=None, help='Checkpoint to trained model.')
     p.add_argument('--dgcnn', action='store_true', help='If you want to use a DGCNN encoder instead of pointnet (requires more GPU memory)')
     # p.add_argument('--conv', action='store_true', help='If you want to train convolutional occ instead of non-convolutional')
 
@@ -145,7 +146,8 @@ if __name__ == '__main__':
 
     # -- LOAD CHECKPOINT --#
     if opt.checkpoint_path is not None:
-        checkpoint_path = osp.join(path_util.get_ndf_model_weights(), opt.checkpoint_path)
+        # checkpoint_path = osp.join(path_util.get_ndf_model_weights(), opt.checkpoint_path)
+        checkpoint_path = osp.join(path_util.get_nift_weight_src(), opt.checkpoint_path)
         model.load_state_dict(torch.load(checkpoint_path))
 
     # Can use if have multiple gpus.  Currently untested.
@@ -153,7 +155,7 @@ if __name__ == '__main__':
     model_parallel = model
 
     # -- CREATE SAVE UTILS -- #
-    summary_fn = summaries.scf_net
+    summary_fn = scf_net
 
     t = datetime.now()
     time_str = t.strftime('%Y-%m-%d_%HH%MM%SS_%a')
@@ -161,7 +163,7 @@ if __name__ == '__main__':
 
     root_path = os.path.join(opt.logging_root, experiment_name)
 
-    root_path = make_unique_path_to_dir(root_path)
+    # root_path = make_unique_path_to_dir(root_path)
 
     # -- CREATE CONFIG -- #
     config = {}
