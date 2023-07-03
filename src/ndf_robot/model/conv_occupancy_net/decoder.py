@@ -45,8 +45,8 @@ class LocalDecoder(nn.Module):
             ResnetBlockFC(hidden_size) for i in range(n_blocks)
         ])
 
-        # self.fc_out = nn.Linear(hidden_size, 1)
-        self.fc_out = nn.Linear(hidden_size, 5)
+        self.fc_out = nn.Linear(hidden_size, 1)
+        # self.fc_out = nn.Linear(hidden_size, 5)
 
         if not leaky:
             self.actvn = F.relu

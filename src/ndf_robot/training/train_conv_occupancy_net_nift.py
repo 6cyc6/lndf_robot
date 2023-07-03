@@ -79,6 +79,7 @@ if __name__ == '__main__':
     latent_dim_128 = {
         'latent_dim': 128,
         'return_features': True,
+        'sigmoid': False,
         'acts': 'last'
     }
     # conv_occ_args = latent_dim_32
